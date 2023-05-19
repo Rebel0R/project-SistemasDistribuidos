@@ -88,15 +88,17 @@ public class TelaLogout {
 					json.put("operacao", 9);
 					json.put("token", token);
 					json.put("id", id);
-					System.out.println("Enviando mensagem: " + json + "\n através da porta: " + TelaClientePorta.portaCliente);
+					System.out.println("\tLOGOUT\nEnviando mensagem do CLIENTE: " + json + "\n pela porta: " + TelaClientePorta.portaCliente +" utilizando o IP: "+TelaClientePorta.ipCliente);
 					try {
 						JSONObject respostaServidor = ClienteECHO.conectarServidor(json);
+						System.out.println("\tLOGOUT\nRecebendo mensagem do SERVIDOR: "+respostaServidor);
 						String status = respostaServidor.getString("status");
 						int operacao = respostaServidor.getInt("operacao");
 						
 						if(status.equals("OK")) {
 							JOptionPane.showMessageDialog(frmLogout, "Operação: +"+operacao+"\nLogout realizado com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
 							TelaFeed.setState(false);
+							ControleSessao.limparDadosSessao();
 							frmLogout.dispose();
 						}else {
 							JOptionPane.showMessageDialog(frmLogout, "Algo deu errado!", "Erro", JOptionPane.ERROR_MESSAGE);

@@ -112,8 +112,9 @@ public class TelaLogin {
 						objetoJSON.put("senha", senhaCrip);
 						objetoJSON.put("operacao", 2);
 						
-						System.out.println("Enviando mensagem: " + objetoJSON + "\n através da porta: " + TelaClientePorta.portaCliente);
+						System.out.println("\tLOGIN\nEnviando mensagem do CLIENTE: " + objetoJSON + "\n pela porta: " + TelaClientePorta.portaCliente +" utilizando o IP: "+TelaClientePorta.ipCliente);
 						JSONObject respostaServidor = ClienteECHO.conectarServidor(objetoJSON);
+						System.out.println("\tLOGIN\nRecebendo mensagem do SERVIDOR: "+respostaServidor);
 						String status = respostaServidor.getString("status");
 						int operacao = respostaServidor.getInt("operacao");
 						String token = respostaServidor.getString("token");
@@ -122,17 +123,11 @@ public class TelaLogin {
 						
 						if(status.equals("OK")) {
 							JOptionPane.showMessageDialog(frmLoginSmaicc, "Operação: "+operacao+"\nUsuário logado com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
-							//Token.anexarUsuario(token, idUsuario);
-							//TelaFeed.mudarEstadoFeed(token, idUsuario, nomeUser);
 							ControleSessao.armazenarDadosSessao(token, nomeUser, idUsuario);
-							
 							textFieldEmail.setText("");
 							textFieldSenha.setText("");
 							TelaFeed.setState(true);
 							frmLoginSmaicc.dispose();
-							
-							
-							
 						}else {
 							JOptionPane.showMessageDialog(frmLoginSmaicc, "Algo deu errado durante o login!", "Erro", JOptionPane.ERROR_MESSAGE);
 						}

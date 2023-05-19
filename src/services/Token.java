@@ -10,10 +10,11 @@ public class Token {
 	
 	public static Token getInstance() {
 	    if (instance == null) {
-	    	System.out.println("token - novo");
+	    	System.out.println("Novo Token gerado");
 	        instance = new Token();
+	        return instance;
 	    }
-	    System.out.println("token - continua");
+	    //System.out.println("Token em em execução");
 	    return instance;
 	}
 	
@@ -39,14 +40,14 @@ public class Token {
 	
 	public void anexarUsuario(String novoToken, Integer idUser) {
 		usuariosLogados.put(idUser, novoToken);
-		System.out.println("Novo usuário logado");
+		System.out.println("Novo login realizado no sistema!");
 	}
 	
 	public void desanexarUsuario(Integer idUser, String tokenUser) {
 		boolean verificacao = procurarUsuario(idUser, tokenUser);
 		if (verificacao) {
-			System.out.println("Token encontrado");
 			usuariosLogados.remove(idUser);
+			System.out.println("Token encontrado!\nLogin removido com sucesso!");
 		}else {
 			System.out.println("Algo deu errado!");
 		}
@@ -55,10 +56,10 @@ public class Token {
 	public boolean procurarUsuario(Integer idUser, String tokenUser) {
 		//listarUsuariosLogados();
 		if (usuariosLogados.containsKey(idUser) && usuariosLogados.containsValue(tokenUser)) {
-			System.out.println(idUser+" existe!");
+			System.out.println("Busca encontrada!\n"+idUser+" existente na lista de logins!");
 			return true;	
 		}else {
-			System.out.println(idUser+" não existe!");
+			System.out.println("Falha!\n"+idUser+" não existente na lista de logins!");
 			return false;
 		}
 	}

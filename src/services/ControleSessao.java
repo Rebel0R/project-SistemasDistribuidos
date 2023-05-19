@@ -10,7 +10,7 @@ public class ControleSessao {
 		token = tokenLogin;
 		nome = nomeLogin;
 		id = idLogin;
-		System.out.println("Dados Armazenados");
+		System.out.println("Dados Armazenados com sucesso no controle de sessão!");
 	}
 	
 	public static int receberId() {
@@ -27,6 +27,6 @@ public class ControleSessao {
 		token = "";
 		nome = "";
 		id = -1;
-		System.out.println("Dados Apagados");
+		System.out.println("Dados Apagados com sucesso no controle de sessão!");
 	}
 }

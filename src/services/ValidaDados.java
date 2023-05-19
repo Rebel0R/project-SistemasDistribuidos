@@ -1,5 +1,9 @@
 package services;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeParseException;
+
 public class ValidaDados {
 	
 	public static boolean validarNome(String name) { 
@@ -26,7 +30,7 @@ public class ValidaDados {
 	    return true;
 	}
 	public static boolean validarSenha(String senha) {
-		if(senha.isEmpty() || senha.length()<5 || senha.length()>10) {
+		if(senha.isEmpty() || senha.length()<5 || senha.length()>10 || !senha.matches("[a-zA-Z0-9]+")) {
 			return false;
 		}
 		return true;
@@ -48,6 +52,100 @@ public class ValidaDados {
 		boolean senhaValido = validarNome(senha);
 		
 		if(emailValido == false || senhaValido == false) {
+			return false;
+		}
+		return true;
+	}
+	
+	public static boolean validarStringCedilhaAcentos(String str) {
+		if(str.isEmpty() || str.matches(".*[çÇ].*") || str.equals(str.toLowerCase()) || str.matches(".*[áàãâéèêíïóôõöúü].*") || str.matches(".*[ÁÀÃÂÉÈÊÍÏÓÔÕÖÚÜ].*")) {
+			return false;
+		}
+		return true;
+	}
+	
+	public static boolean validarRua(String rua) {
+		boolean validaRua = validarStringCedilhaAcentos(rua);
+		if(rua.length()>50 || validaRua==false) {
+			return false;
+		}
+		return true;
+	}
+	
+	public static boolean validarBairro(String bairro) {
+		boolean validaBairro = validarStringCedilhaAcentos(bairro);
+		if(bairro.length()>50 || validaBairro==false) {
+			return false;
+		}
+		return true;
+	}
+	
+	public static boolean validarCidade(String cidade) {
+		boolean validaCidade = validarStringCedilhaAcentos(cidade);
+		if(cidade.length()>50 || !validaCidade) {
+			return false;
+		}
+		return true;
+	}
+	
+	public static boolean validarUF(String estado) {
+		if(estado.length()!=2 || estado.equals(estado.toLowerCase()) || estado.equals("Estados")) {
+			return false;
+		}
+		return true;
+	}
+	public static boolean validarData(String data) {
+		//formato da data = yyyy-mm-dd
+		try {
+		    LocalDate dataFormatada = LocalDate.parse(data);
+		
+		    if (dataFormatada != null) {
+		       return true;
+		    } else {
+		       return false;
+		    }
+		} catch (DateTimeParseException e) {
+		    System.out.println("Data inválida: " + data);
+		    return false;
+		}
+	}
+	
+	public static boolean validarHora(String hora) {
+		try {
+		    LocalTime horaFormatada = LocalTime.parse(hora);
+
+		    // Verificar se o horário é válido
+		    if (horaFormatada != null) {
+		        return true;
+		    } else {
+		        return false;
+		    }
+		} catch (DateTimeParseException e) {
+		    System.out.println("Horário inválido: " + hora);
+		    return false;
+		}
+	}
+	
+	public static boolean validarIncidente(String incidente) {
+		String[] tiposIncidentes = {"Incidentes","Alagamento", "Deslizamento", "Acidente de carro", "Obstrução da via", "Fissura da via", "Pista em obras", "Lentidão na pista", "Animais na pista", "Nevoeiro", "Tromba d'água"};
+		boolean incidenteExiste =  false;
+		
+		for (String incidenteUn : tiposIncidentes) {
+		    if (incidente.contains(incidenteUn)) {
+		        incidenteExiste = true;
+		        break;
+		    }
+		}
+		
+		if(incidente.equals("Incidentes")) {
+			return false;
+		}
+		
+		return incidenteExiste;
+	}
+	
+	public static boolean validarCadastroIncidente(String cidade, String estado, String rua, String bairro, String data, String hora, String incidente) {
+		if(!validarCidade(cidade) || !validarUF(estado)|| !validarRua(rua) || !validarBairro(bairro) || !validarData(data) || !validarHora(hora) || !validarIncidente(incidente)) {
 			return false;
 		}
 		return true;

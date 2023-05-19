@@ -123,14 +123,16 @@ public class TelaCadastro {
 						objetoJSON.put("email", email);
 						objetoJSON.put("senha", novaSenha);
 						objetoJSON.put("operacao", 1);
-						System.out.println("Enviando mensagem: " + objetoJSON + "\n através da porta: " + TelaClientePorta.portaCliente);
+						System.out.println("\tCADASTRO\nEnviando mensagem do CLIENTE: " + objetoJSON + "\n pela porta: " + TelaClientePorta.portaCliente +" utilizando o IP: "+TelaClientePorta.ipCliente);
 						JSONObject respostaServidor = ClienteECHO.conectarServidor(objetoJSON);
+						System.out.println("\tCADASTRO\nRecebendo mensagem do SERVIDOR: "+respostaServidor);
 						
 						String status = respostaServidor.getString("status");
 						
 						if(status.equals("OK")) {
 							System.out.println("Tela Cadastro: "+respostaServidor);
 							JOptionPane.showMessageDialog(frmCadastroSmaicc, "Usuário Cadastrado", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+							frmCadastroSmaicc.dispose();
 						}else {
 							JOptionPane.showMessageDialog(frmCadastroSmaicc, "Algo deu errado durante o cadastro!", "Erro", JOptionPane.ERROR_MESSAGE);
 						}

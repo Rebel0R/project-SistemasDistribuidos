@@ -13,12 +13,15 @@ public class ClienteECHO {
 
         int portUser = TelaClientePorta.portaCliente;
       
-        Socket server = new Socket("localhost", portUser);
-        System.out.println("\tCLIENTE");
+        //Socket cliente = new Socket("localhost", portUser);
+        //adicionar a opção de ip  -> Usando no pc do vini
+        //Socket cliente = new Socket("10.20.8.11", portUser);
+        Socket cliente = new Socket(TelaClientePorta.ipCliente, portUser);
+        //System.out.println("\tENVIANDO DADOS DO CLIENTE");
         
         //Criando Buffer de entrada e saída
-        BufferedReader bfDentro = new BufferedReader(new InputStreamReader(server.getInputStream()));
-        PrintWriter prFora = new PrintWriter(server.getOutputStream());
+        BufferedReader bfDentro = new BufferedReader(new InputStreamReader(cliente.getInputStream()));
+        PrintWriter prFora = new PrintWriter(cliente.getOutputStream());
         
         String mensagemEnviada = mensagemCliente.toString();
 
@@ -26,13 +29,13 @@ public class ClienteECHO {
         prFora.flush();
 
         String mensagemRecebida = bfDentro.readLine();
-        System.out.println("Mensagem recebida: " + mensagemRecebida);
+        //System.out.println("Mensagem recebida do servidor: \n" + mensagemRecebida);
         
         mensagemConvertida = new JSONObject(mensagemRecebida);
         
         bfDentro.close();
         prFora.close();
-        server.close();
+        cliente.close();
         return mensagemConvertida;
 
     }
