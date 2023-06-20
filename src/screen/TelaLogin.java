@@ -117,23 +117,24 @@ public class TelaLogin {
 						System.out.println("\tLOGIN\nRecebendo mensagem do SERVIDOR: "+respostaServidor);
 						String status = respostaServidor.getString("status");
 						int operacao = respostaServidor.getInt("operacao");
-						String token = respostaServidor.getString("token");
-						String nomeUser = respostaServidor.getString("nome");
-						int idUsuario = respostaServidor.getInt("id");
 						
 						if(status.equals("OK")) {
-							JOptionPane.showMessageDialog(frmLoginSmaicc, "Operação: "+operacao+"\nUsuário logado com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+							String nomeUser = respostaServidor.getString("nome");
+							int idUsuario = respostaServidor.getInt("id");
+							JOptionPane.showMessageDialog(frmLoginSmaicc, "Login - Operação: "+operacao+"\nUsuário logado com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+							String token = respostaServidor.getString("token");
 							ControleSessao.armazenarDadosSessao(token, nomeUser, idUsuario);
 							textFieldEmail.setText("");
 							textFieldSenha.setText("");
 							TelaFeed.setState(true);
 							frmLoginSmaicc.dispose();
 						}else {
-							JOptionPane.showMessageDialog(frmLoginSmaicc, "Algo deu errado durante o login!", "Erro", JOptionPane.ERROR_MESSAGE);
+							JOptionPane.showMessageDialog(frmLoginSmaicc, status, "Erro", JOptionPane.ERROR_MESSAGE);
 						}
 						
 					}catch(Exception ex) {
 						System.out.println("Erro ao se conectar: "+ex);
+						JOptionPane.showMessageDialog(frmLoginSmaicc, "Algo deu errado durante a conexão", "Erro", JOptionPane.ERROR_MESSAGE);
 					}
 				}else {
 					if(ValidaDados.validarEmail(email) == false) {

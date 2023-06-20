@@ -1,7 +1,7 @@
 package entity;
 
 public class Incidente {
-	private String tipoIncidente;
+	private int tipoIncidente;
 	private String data;
 	private String hora;
 	private String cidade;
@@ -13,7 +13,7 @@ public class Incidente {
 	
 	private int id = -1;
 	
-	public Incidente(String tipoIncidente, String data, String hora, String cidade, String bairro, String rua,
+	public Incidente(int tipoIncidente, String data, String hora, String cidade, String bairro, String rua,
 			String estado, String token, int idUsuario) {
 		this.tipoIncidente = tipoIncidente;
 		this.data = data;
@@ -34,7 +34,7 @@ public class Incidente {
 		this.id = id;
 	}
 	
-	public String getTipoIncidente() {
+	public int getTipoIncidente() {
 		return tipoIncidente;
 	}
 	public String getData() {

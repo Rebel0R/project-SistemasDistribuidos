@@ -96,18 +96,18 @@ public class TelaLogout {
 						int operacao = respostaServidor.getInt("operacao");
 						
 						if(status.equals("OK")) {
-							JOptionPane.showMessageDialog(frmLogout, "Operação: +"+operacao+"\nLogout realizado com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+							JOptionPane.showMessageDialog(frmLogout, "Logout - Operação: "+operacao+"\nLogout realizado com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
 							TelaFeed.setState(false);
 							ControleSessao.limparDadosSessao();
 							frmLogout.dispose();
 						}else {
-							JOptionPane.showMessageDialog(frmLogout, "Algo deu errado!", "Erro", JOptionPane.ERROR_MESSAGE);
+							JOptionPane.showMessageDialog(frmLogout, status, "Erro", JOptionPane.ERROR_MESSAGE);
 						}
 					} catch (JSONException e1) {
-					
+						JOptionPane.showMessageDialog(frmLogout, "Algo deu errado!", "Erro", JOptionPane.ERROR_MESSAGE);
 						e1.printStackTrace();
 					} catch (IOException e1) {
-						
+						JOptionPane.showMessageDialog(frmLogout, "Algo deu errado!", "Erro", JOptionPane.ERROR_MESSAGE);
 						e1.printStackTrace();
 					}
 				}else {

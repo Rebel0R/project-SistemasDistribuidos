@@ -20,14 +20,18 @@ import servidorECHO.ClienteECHO;
 
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.awt.event.ActionEvent;
 
 public class TelaAlterarDados {
-
 	private JFrame frmAtualizaoCadastral;
 	private JTextField textFieldNome;
 	private JTextField textFieldEmail;
 	private JTextField textFieldSenha;
+	private TelaExcluirCadastro excluirCad = new TelaExcluirCadastro();
+	public static boolean stateAttCad = false;
+	private boolean timerCancel = false;
 
 	/**
 	 * Launch the application.
@@ -50,6 +54,17 @@ public class TelaAlterarDados {
 	 */
 	public TelaAlterarDados() {
 		initialize();
+		Timer timer = new Timer();
+	    timer.schedule(new TimerTask() {
+	        @Override
+	        public void run() {
+	        		update();
+	        		if(timerCancel == true) {
+	        			timer.cancel();
+	        		}
+	        		
+	        }
+	    }, 0, 1000);
 	}
 
 	/**
@@ -69,13 +84,13 @@ public class TelaAlterarDados {
 		lblTitulo.setFont(new Font("Verdana", Font.BOLD, 21));
 		frmAtualizaoCadastral.getContentPane().add(lblTitulo);
 		
-		JLabel lblOlaUser = new JLabel("Olá, ");
-		lblOlaUser.setForeground(new Color(255, 255, 255));
-		lblOlaUser.setFont(new Font("Verdana", Font.PLAIN, 18));
-		lblOlaUser.setBounds(74, 58, 292, 27);
-		frmAtualizaoCadastral.getContentPane().add(lblOlaUser);
-		lblOlaUser.setText("Olá, "+ControleSessao.receberNome());
-		
+		JLabel lblSubtitle = new JLabel();
+		lblSubtitle.setHorizontalAlignment(SwingConstants.CENTER);
+		lblSubtitle.setText("Atualize seu Nome, E-mail ou Senha");
+		lblSubtitle.setForeground(new Color(255, 255, 255));
+		lblSubtitle.setFont(new Font("Verdana", Font.PLAIN, 14));
+		lblSubtitle.setBounds(74, 58, 292, 27);
+		frmAtualizaoCadastral.getContentPane().add(lblSubtitle);
 		
 		JLabel lblNome = new JLabel("Nome Completo:");
 		lblNome.setForeground(new Color(240, 248, 255));
@@ -120,7 +135,7 @@ public class TelaAlterarDados {
 		btnAlterar.setForeground(Color.WHITE);
 		btnAlterar.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		btnAlterar.setBackground(new Color(102, 153, 255));
-		btnAlterar.setBounds(143, 288, 145, 26);
+		btnAlterar.setBounds(142, 277, 145, 26);
 		frmAtualizaoCadastral.getContentPane().add(btnAlterar);
 		btnAlterar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -145,17 +160,18 @@ public class TelaAlterarDados {
 						String status = respostaServidor.getString("status");
 						
 						if(status.equals("OK")) {
-							System.out.println("Tela Cadastro: "+respostaServidor);
 							JOptionPane.showMessageDialog(frmAtualizaoCadastral, "Atualização dos Dados realizada com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
 							TelaFeed.setState(false);
 							ControleSessao.limparDadosSessao();
 							frmAtualizaoCadastral.dispose();
+							
 						}else {
-							JOptionPane.showMessageDialog(frmAtualizaoCadastral, "Algo deu errado durante a Atualização Cadastral!", "Erro", JOptionPane.ERROR_MESSAGE);
+							JOptionPane.showMessageDialog(frmAtualizaoCadastral, status, "Erro", JOptionPane.ERROR_MESSAGE);
 						}
 							
 					}catch(Exception ex) {
 						System.out.println("Erro:"+ex);
+						JOptionPane.showMessageDialog(frmAtualizaoCadastral, "Algo deu errado durante a Atualização Cadastral!", "Erro", JOptionPane.ERROR_MESSAGE);
 					}
 				}else {
 					if(ValidaDados.validarNome(novoNome)== false) {
@@ -175,7 +191,7 @@ public class TelaAlterarDados {
 		btnVoltar.setForeground(new Color(102, 153, 255));
 		btnVoltar.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		btnVoltar.setBackground(Color.WHITE);
-		btnVoltar.setBounds(143, 324, 145, 26);
+		btnVoltar.setBounds(142, 349, 145, 26);
 		frmAtualizaoCadastral.getContentPane().add(btnVoltar);
 		btnVoltar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -183,8 +199,35 @@ public class TelaAlterarDados {
 			}
 		});
 		
+		JButton btnExcluirCadastro = new JButton("Excluir Cadastro");
+		btnExcluirCadastro.setForeground(new Color(255, 255, 255));
+		btnExcluirCadastro.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		btnExcluirCadastro.setBackground(new Color(128, 0, 0));
+		btnExcluirCadastro.setBounds(142, 313, 145, 26);
+		frmAtualizaoCadastral.getContentPane().add(btnExcluirCadastro);
+		btnExcluirCadastro.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				excluirCad.getFrmExcluirCadastro().setVisible(true);
+				if(stateAttCad == true) {
+					TelaFeed.setState(false);
+					ControleSessao.limparDadosSessao();
+					frmAtualizaoCadastral.dispose();
+				}else {
+					System.out.println("Deu errado");
+				}
+			}
+		});
+		
+		
 	}
-
+	public void update() {
+		if(stateAttCad == true) {
+			timerCancel = true;
+			TelaFeed.setState(false);
+			ControleSessao.limparDadosSessao();
+			frmAtualizaoCadastral.dispose();
+		}
+	}
 	public JFrame getFrmAtualizaoCadastral() {
 		return frmAtualizaoCadastral;
 	}

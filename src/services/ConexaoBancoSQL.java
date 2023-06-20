@@ -49,7 +49,7 @@ public class ConexaoBancoSQL {
 	 }
 	 
 	 public void alterarDadosUsuario (Usuario user) throws SQLException{
-		 Usuario userBusca = buscarUsuario(user.getEmail());
+		 Usuario userBusca = buscarUsuarioId(user.getId());
 		 if(userBusca.getNome() != user.getNome() || userBusca.getEmail() !=user.getEmail() || userBusca.getSenha() != user.getSenha()) {
 			 PreparedStatement stmt = conexao.prepareStatement("UPDATE Usuario SET Nome = ?, Email = ?, Senha = ? WHERE ID = ?");
 			 stmt.setString(1, user.getNome());
@@ -65,9 +65,37 @@ public class ConexaoBancoSQL {
 		 
 	 }
 	 
-	 public Usuario buscarUsuario(String loginEmail) throws SQLException {
-	        PreparedStatement stmt = conexao.prepareStatement("SELECT * FROM usuario WHERE email = ?");
-	        stmt.setString(1, loginEmail);
+	 public boolean excluirUsuario(int idUser, String senhaUser) throws SQLException {
+		    PreparedStatement stmt = conexao.prepareStatement("DELETE FROM usuario WHERE id = ? AND senha = ?");
+	        stmt.setInt(1, idUser);
+	        stmt.setString(2, senhaUser);
+	        int linhasAfetadas = stmt.executeUpdate();
+	        return linhasAfetadas > 0;
+	 }
+	 
+	 public Usuario buscarUsuarioLogin(String loginEmail, String loginSenha) throws SQLException {
+		    PreparedStatement stmt = conexao.prepareStatement("SELECT * FROM usuario WHERE email = ? AND senha = ?");
+		    stmt.setString(1, loginEmail);
+		    stmt.setString(2, loginSenha);
+		    ResultSet rs = stmt.executeQuery();
+
+		    if (rs.next()) {
+		        System.out.println("SQL - Usuário encontrado\n");
+		        Integer id = rs.getInt("id");
+		        String nome = rs.getString("nome");
+		        String email = rs.getString("email");
+		        String senha = rs.getString("senha");
+		        Usuario usuario = new Usuario(nome, email, senha);
+		        usuario.setId(id);
+		        return usuario;
+		    }
+		    return null;
+		}
+
+	 
+	 public Usuario buscarUsuarioId(int idUser) throws SQLException {
+	        PreparedStatement stmt = conexao.prepareStatement("SELECT * FROM usuario WHERE id = ?");
+	        stmt.setInt(1, idUser);
 	        ResultSet rs = stmt.executeQuery();
 	        
 	        if (rs.next()) {
@@ -91,7 +119,7 @@ public class ConexaoBancoSQL {
 			stmt.setString(4, incidente.getCidade());
 			stmt.setString(5, incidente.getBairro());
 			stmt.setString(6, incidente.getRua());
-			stmt.setString(7, incidente.getTipoIncidente());
+			stmt.setInt(7, incidente.getTipoIncidente());
 			stmt.setString(8, incidente.getToken());
 			stmt.setInt(9, incidente.getIdUsuario());
 			stmt.executeUpdate();
@@ -109,7 +137,7 @@ public class ConexaoBancoSQL {
 		 ResultSet rs = stmt.executeQuery();
 		 
 		 while (rs.next()) {
-             String tipoIncidente = rs.getString("tipo_incidente");
+             int tipoIncidente = rs.getInt("tipo_incidente");
              String hora = rs.getString("hora");
              String rua = rs.getString("rua");
              String bairro = rs.getString("bairro");
@@ -124,6 +152,40 @@ public class ConexaoBancoSQL {
          }
 		 
 		 return incidentes;
+	 }
+	 
+	 public List<Incidente> buscarIncidentesIdUser (int idUser) throws SQLException {
+		 List<Incidente> incidentes = new ArrayList<>();
+		 PreparedStatement stmt = conexao.prepareStatement("SELECT * FROM incidentes WHERE id_user = ?");
+		 stmt.setInt(1, idUser);
+		 ResultSet rs = stmt.executeQuery();
+		 while (rs.next()) {
+             int tipoIncidente = rs.getInt("tipo_incidente");
+             String hora = rs.getString("hora");
+             String data = rs.getString("data");
+             String cidade = rs.getString("cidade");
+             String uf = rs.getString("estado");
+             String rua = rs.getString("rua");
+             String bairro = rs.getString("bairro");
+             String token =  rs.getString("token");
+             int idUserBanco = rs.getInt("id_user");
+             int idIncidente = rs.getInt("id");
+
+             // Criando objeto incidente e adicionando na lista
+             Incidente incidente = new Incidente(tipoIncidente, data, hora, cidade, bairro, rua, uf, token, idUserBanco);
+             incidente.setId(idIncidente);
+             incidentes.add(incidente);
+         }
+		 
+		 return incidentes;
+	 }
+	 
+	 public boolean excluirIncidente(int idIncidente, int idUsuario) throws SQLException {
+		    PreparedStatement stmt = conexao.prepareStatement("DELETE FROM incidentes WHERE id = ? AND id_user = ?");
+	        stmt.setInt(1, idIncidente);
+	        stmt.setInt(2, idUsuario);
+	        int linhasAfetadas = stmt.executeUpdate();
+	        return linhasAfetadas > 0;
 	 }
 	
 }

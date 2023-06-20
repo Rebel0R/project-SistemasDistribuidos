@@ -47,7 +47,7 @@ public class Token {
 		boolean verificacao = procurarUsuario(idUser, tokenUser);
 		if (verificacao) {
 			usuariosLogados.remove(idUser);
-			System.out.println("Token encontrado!\nLogin removido com sucesso!");
+			System.out.println("Token encontrado! Login removido com sucesso!");
 		}else {
 			System.out.println("Algo deu errado!");
 		}
@@ -56,10 +56,10 @@ public class Token {
 	public boolean procurarUsuario(Integer idUser, String tokenUser) {
 		//listarUsuariosLogados();
 		if (usuariosLogados.containsKey(idUser) && usuariosLogados.containsValue(tokenUser)) {
-			System.out.println("Busca encontrada!\n"+idUser+" existente na lista de logins!");
+			System.out.println("Busca encontrada! ID:"+idUser+" existente na lista de logins!");
 			return true;	
 		}else {
-			System.out.println("Falha!\n"+idUser+" não existente na lista de logins!");
+			System.out.println("Falha! ID: "+idUser+" não existente na lista de logins!");
 			return false;
 		}
 	}

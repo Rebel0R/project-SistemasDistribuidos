@@ -156,7 +156,7 @@ public class TelaCadastroIncidente {
 		lblIncidentes.setBounds(91, 309, 130, 26);
 		frmCadastrarIncidente.getContentPane().add(lblIncidentes);
 		
-		String[] tiposIncidentes = {"Incidentes","Alagamento", "Deslizamento", "Acidente de carro", "Obstrução da via", "Fissura da via", "Pista em obras", "Lentidão na pista", "Animais na pista", "Nevoeiro", "Tromba d'água"};
+		String[] tiposIncidentes = {"Alagamento", "Deslizamento", "Acidente de carro", "Obstrução da via", "Fissura da via", "Pista em obras", "Lentidão na pista", "Animais na pista", "Nevoeiro", "Tromba d'água"};
 		DefaultComboBoxModel<String> modelIncidentes = new DefaultComboBoxModel<>(tiposIncidentes);
 		JComboBox<String> comboBoxIncidentes = new JComboBox<String>(modelIncidentes);
 		comboBoxIncidentes.setFont(new Font("Tahoma", Font.PLAIN, 12));
@@ -183,8 +183,42 @@ public class TelaCadastroIncidente {
 				String data = textFieldData.getText();
 				String hora = textFieldHora.getText();
 				String incidente = (String)comboBoxIncidentes.getSelectedItem();
+				int numIncidente = -1;
 				
-				if(ValidaDados.validarCadastroIncidente(cidade, uf, rua, bairro, data, hora, incidente)) {
+				switch(incidente) {
+					case "Alagamento":
+						numIncidente = 1;
+						break;
+					case "Deslizamento":
+						numIncidente = 2;
+						break;
+					case "Acidente de carro":
+						numIncidente = 3;
+						break;
+					case "Obstrução da via":
+						numIncidente = 4;
+						break;
+					case "Fissura da via":
+						numIncidente = 5;
+						break;
+					case "Pista em obras":
+						numIncidente = 6;
+						break;
+					case "Lentidão na pista":
+						numIncidente = 7;
+						break;
+					case "Animais na pista":
+						numIncidente = 8;
+						break;
+					case "Nevoeiro":
+						numIncidente = 9;
+						break;
+					case "Tromba d'água":
+						numIncidente = 10;
+						break;
+				}
+				
+				if(ValidaDados.validarCadastroIncidente(cidade, uf, rua, bairro, data, hora, numIncidente)) {
 					System.out.println("\tREPORTAR INCIDENTE\nDados válidos!");
 					try {		
 						objetoJSON.put("operacao", 7);
@@ -195,8 +229,8 @@ public class TelaCadastroIncidente {
 						objetoJSON.put("bairro", bairro);
 						objetoJSON.put("rua", rua);
 						objetoJSON.put("token", ControleSessao.receberToken());
-						objetoJSON.put("id_user", ControleSessao.receberId());
-						objetoJSON.put("tipo_incidente", incidente);
+						objetoJSON.put("id", ControleSessao.receberId());
+						objetoJSON.put("tipo_incidente", numIncidente);
 		
 						System.out.println("\tREPORTAR INCIDENTE\nEnviando mensagem do CLIENTE: " + objetoJSON + "\n pela porta: " + TelaClientePorta.portaCliente +" utilizando o IP: "+TelaClientePorta.ipCliente);
 						JSONObject respostaServidor = ClienteECHO.conectarServidor(objetoJSON);
@@ -206,14 +240,15 @@ public class TelaCadastroIncidente {
 						
 						if(status.equals("OK")) {
 							System.out.println("Tela Cadastro: "+respostaServidor);
-							JOptionPane.showMessageDialog(frmCadastrarIncidente, "Reportar Incidente", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+							JOptionPane.showMessageDialog(frmCadastrarIncidente, "Incidente reportado com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
 							frmCadastrarIncidente.dispose();
 						}else {
-							JOptionPane.showMessageDialog(frmCadastrarIncidente, "Algo deu errado durante o processo de reporte!", "Erro", JOptionPane.ERROR_MESSAGE);
+							JOptionPane.showMessageDialog(frmCadastrarIncidente, status, "Erro", JOptionPane.ERROR_MESSAGE);
 						}
 							
 					}catch(Exception ex) {
 						System.out.println("Erro:"+ex);
+						JOptionPane.showMessageDialog(frmCadastrarIncidente, "Algo deu errado durante o processo de reporte!", "Erro", JOptionPane.ERROR_MESSAGE);
 					}
 				}else {
 					if(!ValidaDados.validarBairro(bairro) || !ValidaDados.validarCidade(cidade) || !ValidaDados.validarRua(rua)) {
@@ -222,7 +257,7 @@ public class TelaCadastroIncidente {
 					if(!ValidaDados.validarData(data) || !ValidaDados.validarHora(hora)) {
 						JOptionPane.showMessageDialog(frmCadastrarIncidente, "Data ou hora inválida, utilize o padrão 'yyyy-mm-dd' para datas e 'hh:mm' para hora", "Erro", JOptionPane.ERROR_MESSAGE);
 					}
-					if(!ValidaDados.validarIncidente(incidente)) {
+					if(!ValidaDados.validarIncidente(numIncidente)) {
 						JOptionPane.showMessageDialog(frmCadastrarIncidente, "Incidente inválido!", "Erro", JOptionPane.ERROR_MESSAGE);
 					}
 					if(!ValidaDados.validarUF(uf)) {

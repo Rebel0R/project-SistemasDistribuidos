@@ -2,7 +2,7 @@ package interfaceSMAICC;
 import screen.TelaClientePorta;
 
 public class SistemaInterfaceUI {
-	private TelaClientePorta clientPort = new TelaClientePorta();
+	private TelaClientePorta clientPort = new TelaClientePorta();	
 	
 	
 	public static void main(String[] args) {

@@ -134,11 +134,12 @@ public class TelaCadastro {
 							JOptionPane.showMessageDialog(frmCadastroSmaicc, "Usuário Cadastrado", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
 							frmCadastroSmaicc.dispose();
 						}else {
-							JOptionPane.showMessageDialog(frmCadastroSmaicc, "Algo deu errado durante o cadastro!", "Erro", JOptionPane.ERROR_MESSAGE);
+							JOptionPane.showMessageDialog(frmCadastroSmaicc, status, "Erro", JOptionPane.ERROR_MESSAGE);
 						}
 							
 					}catch(Exception ex) {
 						System.out.println("Erro:"+ex);
+						JOptionPane.showMessageDialog(frmCadastroSmaicc, "Algo deu errado durante o cadastro!", "Erro", JOptionPane.ERROR_MESSAGE);
 					}
 				}else {
 					if(ValidaDados.validarNome(nome)== false) {

@@ -65,26 +65,29 @@ public class ValidaDados {
 	}
 	
 	public static boolean validarRua(String rua) {
-		boolean validaRua = validarStringCedilhaAcentos(rua);
-		if(rua.length()>50 || validaRua==false) {
+		//boolean validaRua = validarStringCedilhaAcentos(rua);
+		if(rua.length()>50 || rua.equals(rua.toLowerCase())|| rua.isEmpty() || rua.matches(".*[çÇ].*") || rua.matches(".*[áàãâéèêíïóôõöúü].*") || rua.matches(".*[ÁÀÃÂÉÈÊÍÏÓÔÕÖÚÜ].*")) {
 			return false;
 		}
+		
 		return true;
 	}
 	
 	public static boolean validarBairro(String bairro) {
-		boolean validaBairro = validarStringCedilhaAcentos(bairro);
-		if(bairro.length()>50 || validaBairro==false) {
+		//boolean validaBairro = validarStringCedilhaAcentos(bairro);
+		if(bairro.length()>50 || bairro.equals(bairro.toLowerCase()) || bairro.isEmpty() || bairro.matches(".*[çÇ].*") || bairro.matches(".*[áàãâéèêíïóôõöúü].*") || bairro.matches(".*[ÁÀÃÂÉÈÊÍÏÓÔÕÖÚÜ].*") ) {
 			return false;
 		}
+		
 		return true;
 	}
 	
 	public static boolean validarCidade(String cidade) {
-		boolean validaCidade = validarStringCedilhaAcentos(cidade);
-		if(cidade.length()>50 || !validaCidade) {
+		//boolean validaCidade = validarStringCedilhaAcentos(cidade);
+		if(cidade.length()>50 || cidade.equals(cidade.toLowerCase()) || cidade.isEmpty() || cidade.matches(".*[çÇ].*") || cidade.matches(".*[áàãâéèêíïóôõöúü].*") || cidade.matches(".*[ÁÀÃÂÉÈÊÍÏÓÔÕÖÚÜ].*")) {
 			return false;
 		}
+		
 		return true;
 	}
 	
@@ -126,25 +129,14 @@ public class ValidaDados {
 		}
 	}
 	
-	public static boolean validarIncidente(String incidente) {
-		String[] tiposIncidentes = {"Incidentes","Alagamento", "Deslizamento", "Acidente de carro", "Obstrução da via", "Fissura da via", "Pista em obras", "Lentidão na pista", "Animais na pista", "Nevoeiro", "Tromba d'água"};
-		boolean incidenteExiste =  false;
-		
-		for (String incidenteUn : tiposIncidentes) {
-		    if (incidente.contains(incidenteUn)) {
-		        incidenteExiste = true;
-		        break;
-		    }
-		}
-		
-		if(incidente.equals("Incidentes")) {
+	public static boolean validarIncidente(int incidente) {
+		if(incidente < 0 || incidente > 10) {
 			return false;
 		}
-		
-		return incidenteExiste;
+		return true;
 	}
 	
-	public static boolean validarCadastroIncidente(String cidade, String estado, String rua, String bairro, String data, String hora, String incidente) {
+	public static boolean validarCadastroIncidente(String cidade, String estado, String rua, String bairro, String data, String hora, int incidente) {
 		if(!validarCidade(cidade) || !validarUF(estado)|| !validarRua(rua) || !validarBairro(bairro) || !validarData(data) || !validarHora(hora) || !validarIncidente(incidente)) {
 			return false;
 		}

@@ -99,8 +99,6 @@ public class TelaClientePorta {
 				int portaRecebidaInt = Integer.parseInt(portaRecebida);
 				if(portaRecebida.isEmpty() || ipRecebido.isEmpty()) {
 					JOptionPane.showMessageDialog(framePort, "Por favor, preencha o campo informado.", "Erro", JOptionPane.ERROR_MESSAGE);
-				}else if(portaRecebidaInt < 20000 || portaRecebidaInt>25000) {
-					JOptionPane.showMessageDialog(framePort, "Por favor, informe um valor entre 20000 e 25000", "Erro", JOptionPane.ERROR_MESSAGE);
 				}else {
 					System.out.println("\tCLIENTE\nEndereço IP: "+ipRecebido+"\nPorta escolhida: "+portaRecebida);
 					portaCliente = portaRecebidaInt;
